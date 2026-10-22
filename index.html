@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grain_yantra_1</title>
+<meta name="description" content="Grain_yantra_1: solid propellant grain geometry design software">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <a class="brand" href="#" data-go="welcome" aria-label="Grain_yantra_1 home">
+    <img src="assets/mark.svg" alt="" width="30" height="30">
+    <span>Grain_yantra_1</span>
+  </a>
+  <nav aria-label="Workflow">
+    <ol class="steps" id="steps">
+      <li data-step="welcome"><span>1</span>Start</li>
+      <li data-step="geometry"><span>2</span>Geometry</li>
+      <li data-step="params"><span>3</span>Parameters</li>
+      <li data-step="results"><span>4</span>Results</li>
+      <li data-step="feedback"><span>5</span>Feedback</li>
+      <li data-step="download"><span>6</span>Download</li>
+    </ol>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- 1. Welcome ------------------------------------------------------------------>
+  <section class="page" id="page-welcome" aria-labelledby="t-welcome">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1 id="t-welcome" class="wordmark">Grain_<wbr>yantra_1</h1>
+        <p class="lede">Design a solid propellant grain cross-section, solve its port geometry from the
+          analytical formulation sheet, and export an engineering report.</p>
+        <button class="btn primary big" data-go="geometry" id="start-btn">Start the Software</button>
+        <p class="fine" id="welcome-fine">21 port geometries, from the cylindrical BATES bore to the Cassini oval. All dimensions in millimetres.</p>
+      </div>
+      <figure class="hero-sheet" aria-hidden="true">
+        <div class="sheet-frame">
+          <svg id="hero-art" viewBox="-80 -78 175 160" class="hero-svg"></svg>
+        </div>
+        <figcaption><span>Fig. 4</span> Star port, 6 points, Ø 100 mm</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. Geometry selection ---------------------------------------------------------->
+  <section class="page" id="page-geometry" aria-labelledby="t-geometry" hidden>
+    <div class="page-head">
+      <div>
+        <h1 id="t-geometry">Choose a grain geometry</h1>
+        <p class="sub">Each profile is solved with the equations from its section of the reference formulation sheet.</p>
+      </div>
+      <div class="filters" role="tablist" aria-label="Filter geometries" id="filters">
+        <button role="tab" aria-selected="true" data-filter="all">All</button>
+        <button role="tab" aria-selected="false" data-filter="bore">Bores</button>
+        <button role="tab" aria-selected="false" data-filter="perf">Perforated</button>
+        <button role="tab" aria-selected="false" data-filter="slot">Slotted</button>
+        <button role="tab" aria-selected="false" data-filter="lobe">Lobed &amp; polar</button>
+      </div>
+    </div>
+    <div class="plates" id="plates" aria-live="polite"></div>
+  </section>
+
+  <!-- 3. Parameters ------------------------------------------------------------------>
+  <section class="page" id="page-params" aria-labelledby="t-params" hidden>
+    <div class="page-head">
+      <div>
+        <button class="link" data-go="geometry">Change geometry</button>
+        <h1 id="t-params"><span class="fig" id="p-fig"></span><span id="p-name"></span></h1>
+        <p class="sub" id="p-desc"></p>
+      </div>
+    </div>
+    <div class="param-layout">
+      <form id="param-form" novalidate>
+        <div class="form-error" id="form-error" role="alert" hidden></div>
+        <fieldset>
+          <legend>Grain envelope</legend>
+          <div id="f-common"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Propellant</legend>
+          <div class="field">
+            <label for="in-prop">Propellant type</label>
+            <select id="in-prop" name="prop"></select>
+          </div>
+          <div class="field" id="custom-name-field" hidden>
+            <label for="in-prop_name">Propellant name</label>
+            <input id="in-prop_name" name="prop_name" type="text" maxlength="60" placeholder="e.g. KNSB-Fe2O3 1 %">
+          </div>
+          <div id="f-rho"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Port geometry</legend>
+          <div id="f-geom"></div>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="btn primary big" id="solve-btn">Solve geometry</button>
+          <button type="button" class="btn quiet" id="reset-btn">Reset to defaults</button>
+        </div>
+      </form>
+      <aside class="preview" aria-label="Live preview">
+        <div class="sheet-frame small"><div id="preview-svg" class="preview-svg"></div></div>
+        <dl class="readouts" id="readouts"></dl>
+        <p class="preview-state" id="preview-state" aria-live="polite"></p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 4. Results --------------------------------------------------------------------->
+  <section class="page" id="page-results" aria-labelledby="t-results" hidden>
+    <div class="page-head">
+      <div>
+        <button class="link" data-go="params">Edit parameters</button>
+        <h1 id="t-results"><span class="fig" id="r-fig"></span><span id="r-name"></span></h1>
+        <p class="sub" id="r-sub"></p>
+      </div>
+      <div class="status" id="r-status"></div>
+    </div>
+    <div class="results-layout">
+      <div class="results-left">
+        <div class="drawing-sheet">
+          <div class="zones top"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+          <div class="zones side"><span>A</span><span>B</span><span>C</span></div>
+          <div class="drawing" id="r-svg"></div>
+        </div>
+        <table class="title-block" id="r-titleblock"></table>
+      </div>
+      <div class="results-right">
+        <h2 class="h2">Key results</h2>
+        <div class="summary" id="r-summary"></div>
+        <div id="r-checks"></div>
+        <h2 class="h2">Detailed calculations</h2>
+        <p class="sub small">Each step shows the equation, the values substituted in millimetres, and the result.</p>
+        <div id="r-calc"></div>
+      </div>
+    </div>
+    <div class="report-bar">
+      <div>
+        <strong>Download report</strong>
+        <span>Inputs, 2D drawing, equations, substitutions and results in one document.</span>
+      </div>
+      <div class="report-actions">
+        <button class="btn primary big" id="dl-pdf">Download Report (PDF)</button>
+        <button class="btn" id="dl-html">Download Report (HTML)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Feedback -------------------------------------------------------------------->
+  <section class="page narrow" id="page-feedback" aria-labelledby="t-feedback" hidden>
+    <div class="notice" id="dl-notice" hidden></div>
+    <h1 id="t-feedback">Rate the developer</h1>
+    <p class="sub" style="margin-bottom:24px">How well did Grain_yantra_1 work for this design? Your rating and comment are saved with this copy of the software.</p>
+    <form id="fb-form" novalidate>
+      <fieldset class="stars" id="stars">
+        <legend>Rating</legend>
+        <div class="star-row">
+          <input type="radio" name="rating" id="st1" value="1"><label for="st1" title="1 star">★<span class="vh">1 star</span></label>
+          <input type="radio" name="rating" id="st2" value="2"><label for="st2" title="2 stars">★<span class="vh">2 stars</span></label>
+          <input type="radio" name="rating" id="st3" value="3"><label for="st3" title="3 stars">★<span class="vh">3 stars</span></label>
+          <input type="radio" name="rating" id="st4" value="4"><label for="st4" title="4 stars">★<span class="vh">4 stars</span></label>
+          <input type="radio" name="rating" id="st5" value="5"><label for="st5" title="5 stars">★<span class="vh">5 stars</span></label>
+          <output id="star-text" for="stars">Choose 1 to 5 stars</output>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="fb-comment">Comment or suggestion</label>
+        <textarea id="fb-comment" rows="5" maxlength="4000" placeholder="What worked, what was missing, which geometry you would like next…"></textarea>
+      </div>
+      <div class="field">
+        <label for="fb-name">Your name <span class="opt">(optional)</span></label>
+        <input id="fb-name" type="text" maxlength="120" autocomplete="name">
+      </div>
+      <div class="form-error" id="fb-error" role="alert" hidden></div>
+      <div class="form-actions">
+        <button type="submit" class="btn primary big">Submit rating</button>
+        <button type="button" class="btn quiet" data-go="download">Skip</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 6. Download -------------------------------------------------------------------->
+  <section class="page narrow" id="page-download" aria-labelledby="t-download" hidden>
+    <div class="notice ok" id="fb-thanks" hidden>Thank you. Your rating has been saved.</div>
+    <h1 id="t-download" class="wordmark mid">Grain_<wbr>yantra_1</h1>
+    <p class="lede">Take the complete software with you. It runs on Windows, macOS and Linux with Python 3.8 or newer, and needs no extra packages.</p>
+    <a class="btn primary big" id="dl-package" href="/download/Grain_yantra_1.zip" download="Grain_yantra_1.zip">Download Grain_yantra_1</a>
+    <p class="fine">Grain_yantra_1.zip, version <span id="ver"></span></p>
+    <div class="howto">
+      <h2 class="h2">Run it on another computer</h2>
+      <ol>
+        <li>Unzip <b>Grain_yantra_1.zip</b>.</li>
+        <li>Windows: double-click <b>Run_Grain_yantra_1.bat</b>. macOS / Linux: run <b>./Run_Grain_yantra_1.sh</b>.</li>
+        <li>The software opens in its own window, or in your browser if the optional <i>pywebview</i> package is not installed.</li>
+      </ol>
+      <h2 class="h2">What is inside</h2>
+      <table class="contents">
+        <tr><td>Grain_yantra_1.py</td><td>Launcher</td></tr>
+        <tr><td>grain_yantra/</td><td>Python calculation engine, drawing, report generator and local server</td></tr>
+        <tr><td>web/</td><td>HTML, CSS and JavaScript interface</td></tr>
+        <tr><td>build_windows_exe.bat</td><td>Optional: builds a standalone Grain_yantra_1.exe with PyInstaller</td></tr>
+        <tr><td>README.md</td><td>Instructions and equation reference</td></tr>
+      </table>
+    </div>
+    <div class="form-actions">
+      <button class="btn" data-go="geometry">Design another grain</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="js/app.js"></script>
+</body>
+</html>
